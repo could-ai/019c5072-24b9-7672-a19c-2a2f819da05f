@@ -60,7 +60,7 @@ class _StudentListScreenState extends State<StudentListScreen> {
                 final student = _students[index];
                 return Card(
                   margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: ListTile(
+                  child: ExpansionTile(
                     leading: CircleAvatar(
                       backgroundColor: Theme.of(context).colorScheme.primaryContainer,
                       child: Text(
@@ -69,31 +69,37 @@ class _StudentListScreenState extends State<StudentListScreen> {
                       ),
                     ),
                     title: Text(student.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 4),
-                        Row(
+                    subtitle: Text('${student.schoolName} • ${student.gender}'),
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(Icons.cake, size: 14, color: Colors.grey[600]),
-                            const SizedBox(width: 4),
-                            Text(DateFormat('MMM d, yyyy').format(student.dateOfBirth)),
-                            const SizedBox(width: 16),
-                            Icon(Icons.person, size: 14, color: Colors.grey[600]),
-                            const SizedBox(width: 4),
-                            Text(student.gender),
+                            _buildDetailRow(Icons.cake, 'Date of Birth', DateFormat('MMM d, yyyy').format(student.dateOfBirth)),
+                            const SizedBox(height: 8),
+                            _buildDetailRow(Icons.school, 'School', student.schoolName),
+                            const SizedBox(height: 8),
+                            _buildDetailRow(Icons.confirmation_number, 'Center Number', student.centerNumber),
+                            const SizedBox(height: 8),
+                            _buildDetailRow(Icons.person, 'Gender', student.gender),
+                            const SizedBox(height: 16),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: TextButton.icon(
+                                icon: const Icon(Icons.delete_outline, color: Colors.red),
+                                label: const Text('Delete', style: TextStyle(color: Colors.red)),
+                                onPressed: () {
+                                  setState(() {
+                                    _students.removeAt(index);
+                                  });
+                                },
+                              ),
+                            ),
                           ],
                         ),
-                      ],
-                    ),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete_outline, color: Colors.red),
-                      onPressed: () {
-                        setState(() {
-                          _students.removeAt(index);
-                        });
-                      },
-                    ),
+                      ),
+                    ],
                   ),
                 );
               },
@@ -103,6 +109,17 @@ class _StudentListScreenState extends State<StudentListScreen> {
         tooltip: 'Add Student',
         child: const Icon(Icons.add),
       ),
+    );
+  }
+
+  Widget _buildDetailRow(IconData icon, String label, String value) {
+    return Row(
+      children: [
+        Icon(icon, size: 16, color: Colors.grey[600]),
+        const SizedBox(width: 8),
+        Text('$label: ', style: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w500)),
+        Expanded(child: Text(value, style: const TextStyle(fontWeight: FontWeight.bold))),
+      ],
     );
   }
 }
