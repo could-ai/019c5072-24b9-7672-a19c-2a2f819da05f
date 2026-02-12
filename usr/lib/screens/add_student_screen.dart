@@ -13,6 +13,8 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _dobController = TextEditingController();
+  final _schoolNameController = TextEditingController();
+  final _centerNumberController = TextEditingController();
   
   DateTime? _selectedDate;
   String? _selectedGender;
@@ -23,6 +25,8 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
   void dispose() {
     _nameController.dispose();
     _dobController.dispose();
+    _schoolNameController.dispose();
+    _centerNumberController.dispose();
     super.dispose();
   }
 
@@ -48,6 +52,8 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
         name: _nameController.text,
         dateOfBirth: _selectedDate!,
         gender: _selectedGender!,
+        schoolName: _schoolNameController.text,
+        centerNumber: _centerNumberController.text,
       );
       
       Navigator.pop(context, newStudent);
@@ -125,6 +131,40 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please select a gender';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+
+              // School Name Field
+              TextFormField(
+                controller: _schoolNameController,
+                decoration: const InputDecoration(
+                  labelText: 'School Name',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.school),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter school name';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+
+              // Center Number Field
+              TextFormField(
+                controller: _centerNumberController,
+                decoration: const InputDecoration(
+                  labelText: 'Center Number',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.confirmation_number),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter center number';
                   }
                   return null;
                 },
